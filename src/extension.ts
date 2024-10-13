@@ -1,55 +1,17 @@
 import * as vscode from 'vscode';
-import winston from 'winston';
 import { initAssert } from './assert';
-import { Logger } from './log';
+import { createLogger, Logger } from './log';
 import { LanguageParser } from './parsing/parser';
+import { TreeViewProvider } from './providers/treeProvider';
 
-function makeName(str: string) {
+function newCommandName(str: string) {
 	return 'tree-viewer.' + str;
 }
 
-global.logger = new Logger(
-	winston.createLogger({
-		level: 'debug',
-		format: winston.format.simple(),
-		transports: [
-			new winston.transports.File({
-				filename: 'error.log',
-				level: 'error',
-			}),
-			new winston.transports.File({ filename: './combined.log' }),
-
-			new winston.transports.Console({
-				format: winston.format.simple(),
-			}),
-		],
-	})
-);
+global.logger = new Logger(createLogger());
 global.assert = initAssert();
 
-class TreeViewProvider implements vscode.TextDocumentContentProvider {
-	didchangeEmitter: vscode.EventEmitter<vscode.Uri> =
-		new vscode.EventEmitter<vscode.Uri>();
-	onDidChange: vscode.Event<vscode.Uri> | undefined =
-		this.didchangeEmitter.event;
-
-	private text: string = '';
-
-	setText(str: string) {
-		this.text = str;
-		assert(this.onDidChange, 'change events shuld be defined');
-		this.didchangeEmitter.fire(
-			vscode.Uri.parse('readonly:ReadOnlyDocument')
-		);
-	}
-
-	provideTextDocumentContent(
-		uri: vscode.Uri,
-		token: vscode.CancellationToken
-	): vscode.ProviderResult<string> {
-		return this.text;
-	}
-}
+export const VIEW_FILE_NAME = 'readonly:ReadOnlyDocument' as const;
 
 function formatText(str: string): string {
 	let indent = 0;
@@ -70,8 +32,6 @@ function formatText(str: string): string {
 	return words.join('');
 }
 
-function getLanguage() {}
-
 export function activate(context: vscode.ExtensionContext) {
 	LanguageParser.init();
 
@@ -80,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.registerTextDocumentContentProvider('readonly', provider);
 
 	const command = vscode.commands.registerCommand(
-		makeName('lexical_view'),
+		newCommandName('lexical_view'),
 		async () => {
 			const currentEditor = vscode.window.activeTextEditor;
 			if (!currentEditor) {
@@ -105,11 +65,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const nodes = Parsing.parser.parse(text);
 
-			const toparse = nodes.rootNode.toString();
+			provider.setText(formatText(nodes.rootNode.toString()));
 
-			provider.setText(formatText(toparse));
-
-			const uri = vscode.Uri.parse(`readonly:ReadOnlyDocument`);
+			const uri = vscode.Uri.parse(VIEW_FILE_NAME);
 			const doc = await vscode.workspace.openTextDocument(uri);
 
 			await vscode.window.showTextDocument(doc, {
@@ -125,12 +83,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
-export function visualize(range: vscode.Range): void {
-	const editor = vscode.window.activeTextEditor;
-	assert(editor, 'editor is invalid for this operation');
-
-	editor.revealRange(range);
-	editor.selection = new vscode.Selection(range.start, range.end); // Move cursor to that position
-}
 
