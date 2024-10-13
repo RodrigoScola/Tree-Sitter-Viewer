@@ -70,6 +70,8 @@ function formatText(str: string): string {
 	return words.join('');
 }
 
+function getLanguage() {}
+
 export function activate(context: vscode.ExtensionContext) {
 	LanguageParser.init();
 
@@ -80,14 +82,19 @@ export function activate(context: vscode.ExtensionContext) {
 	const command = vscode.commands.registerCommand(
 		makeName('lexical_view'),
 		async () => {
-			const js = await LanguageParser.get('javascript');
-			assert(js, 'parser for javascript was not found');
-
 			const currentEditor = vscode.window.activeTextEditor;
 			if (!currentEditor) {
 				logger.debug('user does not have text editor open');
 				return;
 			}
+
+			const Parsing = await LanguageParser.get(
+				currentEditor.document.languageId
+			);
+			assert(
+				Parsing,
+				`parser for ${currentEditor.document.languageId} was not found`
+			);
 
 			const selection = currentEditor.selection;
 
@@ -96,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
 				text = currentEditor.document.getText(selection);
 			}
 
-			const nodes = js.parser.parse(text);
+			const nodes = Parsing.parser.parse(text);
 
 			const toparse = nodes.rootNode.toString();
 
