@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.registerTextDocumentContentProvider('readonly', provider);
 
 	const command = vscode.commands.registerCommand(
-		newCommandName('lexical_view'),
+		newCommandName('tree_view'),
 		async () => {
 			const currentEditor = vscode.window.activeTextEditor;
 			if (!currentEditor) {

@@ -30,6 +30,9 @@ export const Languages = {
 	go: {
 		module: 'go',
 	},
+	python: {
+		module: 'python',
+	},
 
 	json: {
 		module: 'json',
@@ -52,7 +55,12 @@ export class LanguageParser {
 		});
 	}
 	static path(name: string) {
-		return path.join(__dirname, '..', 'parsers', `${name}.wasm`); // Adjust the path if necessary
+		return path.join(
+			__dirname,
+			'..',
+			'parsers',
+			`tree-sitter-${name}.wasm`
+		); // Adjust the path if necessary
 	}
 	static async get(langname: string) {
 		if (langname in LanguageParser.initedLanguages) {
@@ -85,3 +93,4 @@ export class LanguageParser {
 		];
 	}
 }
+

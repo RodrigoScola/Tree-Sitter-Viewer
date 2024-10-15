@@ -14,7 +14,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "tree-viewer.lexical_view",
+				"command": "tree-viewer.tree_view",
 				"title": "Open new window on the current document or selection",
 				"shortTitle": "New Tree Sitter View Window"
 			}
