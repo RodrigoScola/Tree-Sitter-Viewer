@@ -13,17 +13,9 @@ export type Parsing = {
 };
 
 export const Languages = {
-	javascript: {
-		module: 'javascript',
-	},
-	javascriptreact: {
-		module: 'javascript',
-	},
-	//need to add parser for this but for now lets do javascript
-	typescript: {
-		module: 'typescript',
-	},
-
+	javascript: { module: 'javascript' },
+	javascriptreact: { module: 'javascript' },
+	typescript: { module: 'typescript' },
 	typescriptreact: {
 		module: 'typescript',
 	},
@@ -33,13 +25,38 @@ export const Languages = {
 	python: {
 		module: 'python',
 	},
-
 	json: {
 		module: 'json',
 	},
 	jsonc: {
 		module: 'json',
 	},
+
+	c: { module: 'c' },
+	c_sharp: { module: 'c_sharp' },
+	css: { module: 'css' },
+	elisp: { module: 'elisp' },
+	elixir: { module: 'elixir' },
+	elm: { module: 'elm' },
+	embedded_template: { module: 'embedded_template' },
+	html: { module: 'html' },
+	java: { module: 'java' },
+	cpp: { module: 'cpp' },
+	lua: { module: 'lua' },
+	kotlin: { module: 'kotlin' },
+	objc: { module: 'objc' },
+	php: { module: 'php' },
+	ql: { module: 'ql' },
+	ruby: { module: 'ruby' },
+	rust: { module: 'rust' },
+	scala: { module: 'scala' },
+	solidity: { module: 'solidity' },
+	systemrdl: { module: 'systemrdl' },
+	toml: { module: 'toml' },
+	vue: { module: 'vue' },
+	yaml: { module: 'yaml' },
+	tlaplus: { module: 'tlaplus' },
+	tsx: { module: 'tsx' },
 };
 
 export type SupportedLanguages = keyof typeof Languages;
