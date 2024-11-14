@@ -1,10 +1,6 @@
 import assert from 'assert';
 import path from 'path';
-import {
-	Language,
-	default as Parser,
-	default as parser,
-} from 'web-tree-sitter';
+import { Language, default as Parser, default as parser } from 'web-tree-sitter';
 
 export type Parsing = {
 	module: string;
@@ -13,38 +9,56 @@ export type Parsing = {
 };
 
 export const Languages = {
-	javascript: {
-		module: 'javascript',
-	},
-	javascriptreact: {
-		module: 'javascript',
-	},
-	//need to add parser for this but for now lets do javascript
-	typescript: {
-		module: 'typescript',
-	},
-
+	javascript: { module: 'javascript' },
+	javascriptreact: { module: 'javascript' },
+	typescript: { module: 'typescript' },
 	typescriptreact: {
 		module: 'typescript',
 	},
 	go: {
 		module: 'go',
 	},
-
+	python: {
+		module: 'python',
+	},
 	json: {
 		module: 'json',
 	},
 	jsonc: {
 		module: 'json',
 	},
+
+	c: { module: 'c' },
+	csharp: { module: 'c_sharp' },
+	css: { module: 'css' },
+	elisp: { module: 'elisp' },
+	elixir: { module: 'elixir' },
+	elm: { module: 'elm' },
+	embedded_template: { module: 'embedded_template' },
+	html: { module: 'html' },
+	java: { module: 'java' },
+	cpp: { module: 'cpp' },
+	lua: { module: 'lua' },
+	kotlin: { module: 'kotlin' },
+	objc: { module: 'objc' },
+	php: { module: 'php' },
+	ql: { module: 'ql' },
+	ruby: { module: 'ruby' },
+	rust: { module: 'rust' },
+	scala: { module: 'scala' },
+	solidity: { module: 'solidity' },
+	systemrdl: { module: 'systemrdl' },
+	toml: { module: 'toml' },
+	vue: { module: 'vue' },
+	yaml: { module: 'yaml' },
+	tlaplus: { module: 'tlaplus' },
+	tsx: { module: 'tsx' },
 };
 
 export type SupportedLanguages = keyof typeof Languages;
 
 export class LanguageParser {
-	private static initedLanguages: Partial<
-		Record<keyof typeof Languages, Parsing>
-	> = {};
+	private static initedLanguages: Partial<Record<keyof typeof Languages, Parsing>> = {};
 	static async init() {
 		const wasmPath = LanguageParser.path('tree-sitter');
 		await parser.init({
@@ -52,13 +66,11 @@ export class LanguageParser {
 		});
 	}
 	static path(name: string) {
-		return path.join(__dirname, '..', 'parsers', `${name}.wasm`); // Adjust the path if necessary
+		return path.join(__dirname, '..', 'parsers', `tree-sitter-${name}.wasm`); // Adjust the path if necessary
 	}
 	static async get(langname: string) {
 		if (langname in LanguageParser.initedLanguages) {
-			return LanguageParser.initedLanguages[
-				langname as keyof typeof Languages
-			];
+			return LanguageParser.initedLanguages[langname as keyof typeof Languages];
 		}
 
 		let lang: Language | undefined;
@@ -80,8 +92,7 @@ export class LanguageParser {
 			module: langname,
 			parser: p,
 		};
-		return LanguageParser.initedLanguages[
-			langname as keyof typeof Languages
-		];
+		return LanguageParser.initedLanguages[langname as keyof typeof Languages];
 	}
 }
+

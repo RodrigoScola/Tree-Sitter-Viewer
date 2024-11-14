@@ -1,8 +1,12 @@
 {
+	"publisher": "rodrigoscola",
 	"name": "tree-viewer",
 	"displayName": "Tree Sitter Viewer",
 	"description": "A tree Sitter viewer for the popular parser Tree Sitter",
-	"version": "0.0.1",
+	"repository": {
+		"url": "https://github.com/RodrigoScola/Tree-Sitter-Viewer"
+	},
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.94.0"
 	},
@@ -14,7 +18,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "tree-viewer.lexical_view",
+				"command": "tree-viewer.tree_view",
 				"title": "Open new window on the current document or selection",
 				"shortTitle": "New Tree Sitter View Window"
 			}

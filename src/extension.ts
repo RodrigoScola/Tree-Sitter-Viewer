@@ -48,6 +48,14 @@ export function activate(context: vscode.ExtensionContext) {
 			logger.debug('user does not have text editor open');
 			return;
 		}
+	const command = vscode.commands.registerCommand(
+		newCommandName('tree_view'),
+		async () => {
+			const currentEditor = vscode.window.activeTextEditor;
+			if (!currentEditor) {
+				logger.debug('user does not have text editor open');
+				return;
+			}
 
 		const Parsing = await LanguageParser.get(currentEditor.document.languageId);
 		assert(Parsing, `parser for ${currentEditor.document.languageId} was not found`);
