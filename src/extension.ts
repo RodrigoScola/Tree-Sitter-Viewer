@@ -48,49 +48,48 @@ export function activate(context: vscode.ExtensionContext) {
 			logger.debug('user does not have text editor open');
 			return;
 		}
-	const command = vscode.commands.registerCommand(
-		newCommandName('tree_view'),
-		async () => {
+		const command = vscode.commands.registerCommand(newCommandName('tree_view'), async () => {
 			const currentEditor = vscode.window.activeTextEditor;
 			if (!currentEditor) {
 				logger.debug('user does not have text editor open');
 				return;
 			}
 
-		const Parsing = await LanguageParser.get(currentEditor.document.languageId);
-		assert(Parsing, `parser for ${currentEditor.document.languageId} was not found`);
+			const Parsing = await LanguageParser.get(currentEditor.document.languageId);
+			assert(Parsing, `parser for ${currentEditor.document.languageId} was not found`);
 
-		const selection = currentEditor.selection;
+			const selection = currentEditor.selection;
 
-		let text = currentEditor.document.getText();
-		if (!selection.start.isEqual(selection.end)) {
-			text = currentEditor.document.getText(selection);
-		}
+			let text = currentEditor.document.getText();
+			if (!selection.start.isEqual(selection.end)) {
+				text = currentEditor.document.getText(selection);
+			}
 
-		const nodes = Parsing.parser.parse(text);
+			const nodes = Parsing.parser.parse(text);
 
-		const str = nodes.rootNode.toString();
+			const str = nodes.rootNode.toString();
 
-		let formatted = '';
-		try {
-			formatted = formatText(str);
-		} catch (err) {
-			console.error('error in formatting text?', err);
-		}
+			let formatted = '';
+			try {
+				formatted = formatText(str);
+			} catch (err) {
+				console.error('error in formatting text?', err);
+			}
 
-		provider.setText(formatted);
+			provider.setText(formatted);
 
-		const uri = vscode.Uri.parse(VIEW_FILE_NAME);
-		const doc = await vscode.workspace.openTextDocument(uri);
+			const uri = vscode.Uri.parse(VIEW_FILE_NAME);
+			const doc = await vscode.workspace.openTextDocument(uri);
 
-		await vscode.window.showTextDocument(doc, {
-			preview: true,
-			preserveFocus: true,
-			viewColumn: vscode.ViewColumn.Two,
+			await vscode.window.showTextDocument(doc, {
+				preview: true,
+				preserveFocus: true,
+				viewColumn: vscode.ViewColumn.Two,
+			});
 		});
-	});
 
-	context.subscriptions.push(command);
+		context.subscriptions.push(command);
+	});
 }
 
 // This method is called when your extension is deactivated
