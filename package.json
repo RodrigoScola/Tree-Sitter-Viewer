@@ -6,7 +6,7 @@
 	"repository": {
 		"url": "https://github.com/RodrigoScola/Tree-Sitter-Viewer"
 	},
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"engines": {
 		"vscode": "^1.94.0"
 	},
@@ -56,4 +56,3 @@
 		"winston": "^3.15.0"
 	}
 }
-
